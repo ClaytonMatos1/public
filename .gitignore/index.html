@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Test</title>
+    <script src="//jsuol.com.br/p/perfil/js/widgetNotify.js" type="text/javascript"></script>
+    <script src="https://smartlock.google.com/client"></script>
+    <script src="//www.googletagservices.com/tag/js/gpt.js" async></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        // googletag.cmd.push(function() {
+        //     googletag.pubads().disableInitialLoad();
+        // });
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot('/8804/uol/noticias/capa', [300, 250], 'banner-300x250')
+                .addService(googletag.pubads());
+            googletag.defineSlot('/8804/uol/noticias/capa', [300, 600], 'banner-300x600')
+                .addService(googletag.pubads());
+            googletag.defineSlot('/8804/uol/noticias/capa', [728, 90], 'banner-728x90')
+                .addService(googletag.pubads());
+
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+</head>
+<body>
+    <div id='top' style="background-image: url(//imguol.com.br/tag-manager/icons-sprite.png); width: 156px; height: 48px; margin-left: auto; margin-right: auto;">
+    </div>
+
+    <div style="position: relative; width: 100%; height: 50px; background: #c55448; border: 1px solid #000;"></div>
+        <div id="auth" style="display: inline-block; background: #c55448; position: relative; float: right; height: 40px;"></div>
+    </div>
+    <button onclick="loginSocial()">Logar Google</button>
+    <script>
+        var widgetNotify = new UOL.perfil.widgets.Notify({
+            target: 'auth'
+        });
+        var loginSocial = function () {
+            widgetNotify.LoginSocial.doLogin({
+                network: "google"
+            }, () => console.log('usuário logou'));
+        }
+    </script>
+
+    <script>
+        window.onGoogleYoloLoad = (googleyolo) => {
+            googleyolo.retrieve({
+                supportedAuthMethods: [
+                    "https://accounts.google.com",
+                    "googleyolo://id-and-password"
+                ],
+                supportedIdTokenProviders: [{
+                        uri: "https://accounts.google.com",
+                        clientId: "275309232806-vcpc9ln3nscgogbmqjg3hi7m76sd7mpn.apps.googleusercontent.com"
+                    }
+                ]
+            }).then(credential => {
+                    console.log(credential);
+                    if (credential.password) {
+                        // An ID (usually email address) and password credential was retrieved.
+                        // Sign in to your backend using the password.
+                        // signInWithEmailAndPassword(credential.id, credential.password);
+                    } else {
+                        // A Google Account is retrieved. Since Google supports ID token responses,
+                        // you can use the token to sign in instead of initiating the Google sign-in
+                        // flow.
+                        // useGoogleIdTokenForAuth(credential.idToken);
+                    }
+                }).catch(error => {
+                    // console.log(error);
+                    if (error.type === 'noCredentialsAvailable') {
+                        googleyolo.hint({
+                            supportedAuthMethods: [
+                                    "https://accounts.google.com"
+                                ],
+                                supportedIdTokenProviders: [{
+                                    uri: "https://accounts.google.com",
+                                    clientId: "275309232806-vcpc9ln3nscgogbmqjg3hi7m76sd7mpn.apps.googleusercontent.com"
+                                }
+                            ]
+                        }).then(credential => {
+                            console.log(credential);
+                            if (credential.idToken) {
+                                // Send the token to your auth backend.
+                                //useGoogleIdTokenForAuth(credential.idToken);
+                            }
+                        })
+                        .catch(error => {
+                            switch (error.type) {
+                                case "userCanceled":
+                                    // The user closed the hint selector. Depending on the desired UX,
+                                    // request manual sign up or do nothing.
+                                    break;
+                                case "noCredentialsAvailable":
+                                    // No hint available for the session. Depending on the desired UX,
+                                    // request manual sign up or do nothing.
+                                    loginSocial();
+                                    break;
+                                case "requestFailed":
+                                    // The request failed, most likely because of a timeout.
+                                    // You can retry another time if necessary.
+                                    break;
+                                case "operationCanceled":
+                                    // The operation was programmatically canceled, do nothing.
+                                    break;
+                                case "illegalConcurrentRequest":
+                                    // Another operation is pending, this one was aborted.
+                                    break;
+                                case "initializationError":
+                                    // Failed to initialize. Refer to error.message for debugging.
+                                    break;
+                                case "configurationError":
+                                    // Configuration error. Refer to error.message for debugging.
+                                    break;
+                                default:
+                                    // Unknown error, do nothing.
+                            }
+                        });
+                    }
+                });
+        };
+    </script>
+    <!-- dfp nativo -->
+    <div id="banner-728x90">
+        <script>
+            googletag.cmd.push(function() {
+                googletag.display('banner-728x90');
+            });
+        </script>
+    </div>
+
+    <div style="width: 100%; height: 10px;"></div>
+
+    <!-- dfp nativo -->
+    <div id='banner-300x250'>
+        <script>
+            googletag.cmd.push(function() {
+                googletag.display('banner-300x250');
+            });
+        </script>
+    </div>
+
+    <div style="width: 100%; height: 10px;"></div>
+
+    <!-- dfp nativo -->
+    <div id='banner-300x600'>
+        <script>
+            googletag.cmd.push(function() {
+                googletag.display('banner-300x600');
+            });
+        </script>
+    </div>
+
+    <div style="width: 100%; height: 10px;"></div>
+    <div style="width: 100%; height: 1800px; background: #232B84;"></div>
+</body>
+</html>
